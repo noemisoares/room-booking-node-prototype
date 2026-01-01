@@ -1,112 +1,95 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <title>Room Booking System</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      padding: 2rem;
-    }
-
-    h1 {
-      margin-bottom: 0.5rem;
-    }
-
-    section {
-      background: #fff;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-    }
-
-    input {
-      padding: 0.4rem;
-      margin-right: 0.5rem;
-    }
-
-    ul {
-      margin-top: 0.5rem;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Reserva de Salas</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="container">
+    <header class="header">
+      <div class="header-content">
+        <h1>Sistema de Reserva de Salas</h1>
+        <p>Gerenciar salas e reservas de forma prática</p>
+      </div>
+    </header>
 
-  <h1>Room Booking System</h1>
-  <p>Protótipo funcional para gerenciamento de salas</p>
+    <main class="main-content">
+      <div class="tabs">
+        <button class="tab-button active" data-tab="salas">Salas</button>
+        <button class="tab-button" data-tab="reservar">Criar Reserva</button>
+        <button class="tab-button" data-tab="reservas">Minhas Reservas</button>
+      </div>
 
-  <section>
-    <h2>Salas</h2>
-    <button onclick="carregarSalas()">Carregar salas</button>
-    <ul id="lista-salas"></ul>
-  </section>
+      <section id="salas" class="tab-content active">
+        <div class="section-header">
+          <h2>Salas Disponíveis</h2>
+        </div>
 
-  <section>
-    <h2>Criar reserva</h2>
-    <select id="salaId"></select>
-    <input type="datetime-local" id="inicio" />
-    <input type="datetime-local" id="fim" />
-    <button onclick="criarReserva()">Reservar</button>
-  </section>
+        <div class="form-group">
+          <div class="form-row">
+            <input type="text" id="nomeSala" placeholder="Nome da sala" class="input-field">
+            <input type="number" id="capacidadeSala" placeholder="Capacidade" min="1" class="input-field">
+            <button class="btn btn-primary" onclick="adicionarSala()">Adicionar Sala</button>
+          </div>
+          <div id="mensagem-sala" class="mensagem-feedback"></div>
+        </div>
 
-  <section>
-    <h2>Reservas</h2>
-    <button onclick="carregarReservas()">Carregar reservas</button>
-    <ul id="lista-reservas"></ul>
-  </section>
+        <div class="cards-container" id="lista-salas">
+          <div class="loading">Carregando salas...</div>
+        </div>
+      </section>
 
-  <script>
-    function carregarSalas() {
-      fetch("/api/salas")
-        .then(res => res.json())
-        .then(salas => {
-          const ul = document.getElementById("lista-salas");
-          ul.innerHTML = "";
-          salas.forEach(sala => {
-            const li = document.createElement("li");
-            li.textContent = `${sala.nome} (Capacidade: ${sala.capacidade})`;
-            ul.appendChild(li);
-          });
-        });
-    }
+      <section id="reservar" class="tab-content">
+        <div class="section-header">
+          <h2>Criar Nova Reserva</h2>
+        </div>
 
-    function criarReserva() {
-      const salaId = document.getElementById("salaId").value;
-      const inicio = document.getElementById("inicio").value;
-      const fim = document.getElementById("fim").value;
+        <div class="form-group">
+          <div class="form-field">
+            <label for="selectSala">Selecione uma sala:</label>
+            <select id="selectSala" class="input-field">
+              <option value="">Carregando salas...</option>
+            </select>
+          </div>
 
-      fetch("/api/reservas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ salaId, inicio, fim })
-      })
-      .then(res => res.json())
-      .then(() => {
-        alert("Reserva criada com sucesso!");
-      });
-    }
+          <div class="info-sala" id="infoSala" style="display: none;">
+            <p>Capacidade: <strong id="capaSala">-</strong> pessoas</p>
+          </div>
 
-    function carregarReservas() {
-      fetch("/api/reservas")
-        .then(res => res.json())
-        .then(reservas => {
-          const ul = document.getElementById("lista-reservas");
-          ul.innerHTML = "";
-          reservas.forEach(r => {
-            const li = document.createElement("li");
-            li.textContent = `Sala ${r.salaId} | ${r.inicio} → ${r.fim}`;
-            ul.appendChild(li);
-          });
-        });
-    }
-  </script>
+          <div class="form-field">
+            <label for="dataInicio">Data e hora de início:</label>
+            <input type="datetime-local" id="dataInicio" class="input-field">
+          </div>
 
+          <div class="form-field">
+            <label for="dataFim">Data e hora de término:</label>
+            <input type="datetime-local" id="dataFim" class="input-field">
+          </div>
+
+          <button class="btn btn-primary" onclick="criarReserva()">Confirmar Reserva</button>
+          <div id="mensagem-reserva" class="mensagem-feedback"></div>
+        </div>
+      </section>
+
+      <section id="reservas" class="tab-content">
+        <div class="section-header">
+          <h2>Reservas Agendadas</h2>
+          <button class="btn btn-secondary" onclick="carregarReservas()">Atualizar</button>
+        </div>
+
+        <div class="cards-container" id="lista-reservas">
+          <div class="loading">Carregando reservas...</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© 2026 Sistema de Reserva de Salas - Protótipo</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

@@ -4,6 +4,11 @@
       "id": 1,
       "nome": "Sala de Reunião A",
       "capacidade": 10
+    },
+    {
+      "id": 1767284217078,
+      "nome": "Sala de Treinamento",
+      "capacidade": 25
     }
   ],
   "reservas": [
@@ -12,6 +17,12 @@
       "salaId": 1,
       "inicio": "2026-01-10T10:00",
       "fim": "2026-01-10T11:00"
+    },
+    {
+      "id": 1767284208927,
+      "salaId": 1,
+      "inicio": "2026-01-10T14:00",
+      "fim": "2026-01-10T15:00"
     }
   ]
 }
