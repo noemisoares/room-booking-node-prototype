@@ -1,0 +1,17 @@
+{
+  "salas": [
+    {
+      "id": 1,
+      "nome": "Sala de Reunião A",
+      "capacidade": 10
+    }
+  ],
+  "reservas": [
+    {
+      "id": 1,
+      "salaId": 1,
+      "inicio": "2026-01-10T10:00",
+      "fim": "2026-01-10T11:00"
+    }
+  ]
+}
