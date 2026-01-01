@@ -1,7 +1,7 @@
 {
   "salas": [
     {
-      "id": 1,
+      "id": 1767284208927,
       "nome": "Sala de Reunião A",
       "capacidade": 10
     },
@@ -9,20 +9,19 @@
       "id": 1767284217078,
       "nome": "Sala de Treinamento",
       "capacidade": 25
+    },
+    {
+      "id": 1767284354829,
+      "nome": "Sala de Jogos",
+      "capacidade": 15
     }
   ],
   "reservas": [
     {
-      "id": 1,
-      "salaId": 1,
-      "inicio": "2026-01-10T10:00",
-      "fim": "2026-01-10T11:00"
-    },
-    {
-      "id": 1767284208927,
-      "salaId": 1,
-      "inicio": "2026-01-10T14:00",
-      "fim": "2026-01-10T15:00"
+      "id": 1767284386837,
+      "salaId": 1767284354829,
+      "inicio": "2026-01-03T13:19",
+      "fim": "2026-01-04T13:19"
     }
   ]
 }
