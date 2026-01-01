@@ -1,19 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <title>Room Booking Prototype</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Room Booking System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 2rem;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    section {
+      background: #fff;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+
+    input {
+      padding: 0.4rem;
+      margin-right: 0.5rem;
+    }
+
+    ul {
+      margin-top: 0.5rem;
+    }
+  </style>
 </head>
 <body>
-  <main class="container">
-    <h1>Room Booking System</h1>
-    <p>Node.js prototype for room reservation logic demonstration.</p>
 
-    <div class="card">
-      <h2>Status</h2>
-      <p>Server is running ✔️</p>
-    </div>
-  </main>
+  <h1>Room Booking System</h1>
+  <p>Protótipo funcional para gerenciamento de salas</p>
+
+  <section>
+    <h2>Salas</h2>
+    <button onclick="carregarSalas()">Carregar salas</button>
+    <ul id="lista-salas"></ul>
+  </section>
+
+  <section>
+    <h2>Criar reserva</h2>
+    <select id="salaId"></select>
+    <input type="datetime-local" id="inicio" />
+    <input type="datetime-local" id="fim" />
+    <button onclick="criarReserva()">Reservar</button>
+  </section>
+
+  <section>
+    <h2>Reservas</h2>
+    <button onclick="carregarReservas()">Carregar reservas</button>
+    <ul id="lista-reservas"></ul>
+  </section>
+
+  <script>
+    function carregarSalas() {
+      fetch("/api/salas")
+        .then(res => res.json())
+        .then(salas => {
+          const ul = document.getElementById("lista-salas");
+          ul.innerHTML = "";
+          salas.forEach(sala => {
+            const li = document.createElement("li");
+            li.textContent = `${sala.nome} (Capacidade: ${sala.capacidade})`;
+            ul.appendChild(li);
+          });
+        });
+    }
+
+    function criarReserva() {
+      const salaId = document.getElementById("salaId").value;
+      const inicio = document.getElementById("inicio").value;
+      const fim = document.getElementById("fim").value;
+
+      fetch("/api/reservas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ salaId, inicio, fim })
+      })
+      .then(res => res.json())
+      .then(() => {
+        alert("Reserva criada com sucesso!");
+      });
+    }
+
+    function carregarReservas() {
+      fetch("/api/reservas")
+        .then(res => res.json())
+        .then(reservas => {
+          const ul = document.getElementById("lista-reservas");
+          ul.innerHTML = "";
+          reservas.forEach(r => {
+            const li = document.createElement("li");
+            li.textContent = `Sala ${r.salaId} | ${r.inicio} → ${r.fim}`;
+            ul.appendChild(li);
+          });
+        });
+    }
+  </script>
+
 </body>
 </html>
